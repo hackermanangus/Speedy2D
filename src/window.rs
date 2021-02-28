@@ -365,7 +365,10 @@ impl<UserEventType> WindowImpl<UserEventType>
             );
         }
 
-        let mut window_builder = GlutinWindowBuilder::new().with_title(title);
+        let mut window_builder = GlutinWindowBuilder::new()
+            .with_title(title)
+            .with_decorations(options.decorations())
+            .with_always_on_top(options.on_top());
 
         match &options.mode() {
             WindowCreationMode::Windowed { size, .. } => {
@@ -1690,7 +1693,9 @@ pub struct WindowCreationOptions
 {
     mode: WindowCreationMode,
     multisampling: u16,
-    vsync: bool
+    vsync: bool,
+    on_top: bool,
+    decorations: bool,
 }
 
 impl WindowCreationOptions
@@ -1718,7 +1723,9 @@ impl WindowCreationOptions
         WindowCreationOptions {
             mode,
             multisampling: 8,
-            vsync: true
+            vsync: true,
+            on_top: false,
+            decorations: true
         }
     }
 
@@ -1748,6 +1755,30 @@ impl WindowCreationOptions
         self
     }
 
+    /// Sets whether or not window should be always on top.
+    ///
+    /// Note that this depends on platform support, and setting this may have no
+    /// effect
+    #[inline]
+    #[must_use]
+    pub fn with_always_on_top(mut self, on_top: bool) -> Self
+    {
+        self.on_top = on_top;
+        self
+    }
+
+    /// Sets whether or not window should have decorations.
+    ///
+    /// Note that this depends on platform support, and setting this may have no
+    /// effect
+    #[inline]
+    #[must_use]
+    pub fn with_decorations(mut self, decorations: bool) -> Self
+    {
+        self.decorations = decorations;
+        self
+    }
+
     #[inline]
     #[must_use]
     fn mode(&self) -> &WindowCreationMode
@@ -1767,6 +1798,20 @@ impl WindowCreationOptions
     fn vsync(&self) -> bool
     {
         self.vsync
+    }
+
+    #[inline]
+    #[must_use]
+    fn on_top(&self) -> bool
+    {
+        self.on_top
+    }
+
+    #[inline]
+    #[must_use]
+    fn decorations(&self) -> bool
+    {
+        self.decorations
     }
 }
 
