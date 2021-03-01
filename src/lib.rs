@@ -220,8 +220,8 @@
 //!     32.0,
 //!     TextOptions::new().with_wrap_to_width(300.0, TextAlignment::Left));
 //! ```
-#![deny(warnings)]
-#![deny(missing_docs)]
+// #![deny(warnings)]
+// #![deny(missing_docs)]
 // Suggested fix for len_zero is unstable, see
 // https://github.com/rust-lang/rust/issues/35428
 #![allow(clippy::len_zero)]
